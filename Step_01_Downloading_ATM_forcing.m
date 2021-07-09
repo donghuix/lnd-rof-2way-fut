@@ -1,5 +1,8 @@
 clear;close all;clc;
 
+% Change the defualt timeout time to 30s.
+options = weboptions('Timeout',30);
+
 vars = {'hursAdjust','hussAdjust','prAdjust','prsnAdjust','psAdjust', ...
         'rldsAdjust','rsdsAdjust','sfcWindAdjust','tasAdjust'};
 scenarios = {'historical','ssp370','ssp585'};
