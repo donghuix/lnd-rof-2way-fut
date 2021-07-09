@@ -1,7 +1,7 @@
 #!/bin/csh
 
 #SBATCH --job-name=step01         ## job_name
-#SBATCH --partition=shlurm
+#SBATCH --partition=slurm
 #SBATCH --account=esmd            ## project_name
 #SBATCH --time=20:00:00           ## time_limit
 #SBATCH --nodes=1                 ## number_of_nodes
