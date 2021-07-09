@@ -5,3 +5,7 @@
 historical/
 ssp370/
 ssp585/
+Step_01_Downloading_ATM_forcing_ssp370.m
+Step_01_Downloading_ATM_forcing_ssp370.csh
+Step_01_Downloading_ATM_forcing_ssp585.m
+Step_01_Downloading_ATM_forcing_ssp585.csh
