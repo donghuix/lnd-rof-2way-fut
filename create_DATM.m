@@ -1,4 +1,4 @@
-function create_DATM(fname,longxy,latixy,time,varnames,vars)
+function create_DATM(fname,longxy,latixy,date_tag,time,varnames,vars)
     ncid = netcdf.create(fname,'NC_CLOBBER');
 % +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %
@@ -20,7 +20,7 @@ function create_DATM(fname,longxy,latixy,time,varnames,vars)
 ivar = 1;
 varid(1) = netcdf.defVar(ncid,'time','NC_FLOAT',[dimid(4)]); 
 netcdf.putAtt(ncid,ivar-1,'calendar','noleap');
-netcdf.putAtt(ncid,ivar-1,'units','days since 1850-01-01');
+netcdf.putAtt(ncid,ivar-1,'units',['days since ' date_tag]);
 
 ivar = 2;
 varid(2) = netcdf.defVar(ncid,'LONGXY','NC_FLOAT',[dimid(2) dimid(3)]); 
@@ -122,8 +122,8 @@ netcdf.endDef(ncid);
 netcdf.putVar(ncid,1-1,time);
 netcdf.putVar(ncid,2-1,longxy);
 netcdf.putVar(ncid,3-1,latixy);
-netcdf.putVar(ncid,4-1,180);
-netcdf.putVar(ncid,5-1,-180);
+netcdf.putVar(ncid,4-1,360);
+netcdf.putVar(ncid,5-1,0);
 netcdf.putVar(ncid,6-1,-90);
 netcdf.putVar(ncid,7-1,90);
 for i = 1 : length(varnames)
