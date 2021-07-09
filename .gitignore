@@ -1,0 +1,7 @@
+# ignore all logs
+*.log
+*.err
+*.out
+historical/
+ssp370/
+ssp585/
