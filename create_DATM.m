@@ -1,5 +1,5 @@
 function create_DATM(fname,longxy,latixy,date_tag,time,varnames,vars)
-    ncid = netcdf.create(fname,'NC_CLOBBER');
+    ncid = netcdf.create(fname,'NETCDF4');
 % +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %
 %                           Define dimensions
@@ -65,49 +65,49 @@ for i = 1 : length(varnames)
             netcdf.putAtt(ncid,ivar+i-1,'long_name','PRECTmms total precipitation');
             netcdf.putAtt(ncid,ivar+i-1,'units','mm H2O / sec');
             netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
-            netcdf.putAtt(ncid,ivar+i-1,'_FillValue',1e36);
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
             netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
         case 'FSDS'
             varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
             netcdf.putAtt(ncid,ivar+i-1,'long_name','total incident solar radiation');
             netcdf.putAtt(ncid,ivar+i-1,'units','W/m**2');
             netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
-            netcdf.putAtt(ncid,ivar+i-1,'_FillValue',1e36);
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
             netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
         case 'PSRF'
             varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
             netcdf.putAtt(ncid,ivar+i-1,'long_name','surface pressure at the lowest atm level');
             netcdf.putAtt(ncid,ivar+i-1,'units','Pa');
             netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
-            netcdf.putAtt(ncid,ivar+i-1,'_FillValue',1e36);
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
             netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
         case 'TBOT'
             varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
             netcdf.putAtt(ncid,ivar+i-1,'long_name','temperature at the lowest atm level');
             netcdf.putAtt(ncid,ivar+i-1,'units','K');
             netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
-            netcdf.putAtt(ncid,ivar+i-1,'_FillValue',1e36);
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
             netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
         case 'WIND'
             varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
             netcdf.putAtt(ncid,ivar+i-1,'long_name','wind at the lowest atm level');
             netcdf.putAtt(ncid,ivar+i-1,'units','m/s');
             netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
-            netcdf.putAtt(ncid,ivar+i-1,'_FillValue',1e36);
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
             netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
         case 'QBOT'
             varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
             netcdf.putAtt(ncid,ivar+i-1,'long_name','specific humidity at the lowest atm level');
             netcdf.putAtt(ncid,ivar+i-1,'units','kg/kg');
             netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
-            netcdf.putAtt(ncid,ivar+i-1,'_FillValue',1e36);
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
             netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
         case 'FLDS'
             varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
             netcdf.putAtt(ncid,ivar+i-1,'long_name','incident longwave radiation');
             netcdf.putAtt(ncid,ivar+i-1,'units','W/m**2');
             netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
-            netcdf.putAtt(ncid,ivar+i-1,'_FillValue',1e36);
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
             netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
         otherwise
             error('No such variable');
