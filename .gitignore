@@ -2,6 +2,7 @@
 *.log
 *.err
 *.out
+data/
 historical/
 ssp370/
 ssp585/
