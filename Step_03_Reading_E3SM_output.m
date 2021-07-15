@@ -18,6 +18,7 @@ for i = 1 : length(scenarios)
         elseif iyr < 1000
             files = dir([wkdir scenarios{i} '/run/*mosart.h1.0' num2str(iyr) '*.nc']);
         end
+        q2 = NaN(720,360,length(files),2);
         data = cat_mosart(files,{'RIVER_DISCHARGE_OVER_LAND_LIQ','RIVER_DISCHARGE_TO_OCEAN_LIQ','FLOODPLAIN_FRACTION'});
         q2(:,:,:,1) = data.RIVER_DISCHARGE_OVER_LAND_LIQ;
         q2(:,:,:,2) = data.RIVER_DISCHARGE_TO_OCEAN_LIQ;
