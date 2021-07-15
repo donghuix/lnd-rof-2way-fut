@@ -1,5 +1,6 @@
 clear;close all;clc;
 
+addpath('/qfs/people/xudo627/Setup-E3SM-Mac/matlab-scripts-for-mosart');
 wkdir = '/compyfs/xudo627/e3sm_scratch/';
 scenarios = {'GFDL_FUT_1way_LLR3_7e85a10.2021-07-13-145042', ...
              'GFDL_FUT_2way_LLR3_7e85a10.2021-07-13-142352'};
@@ -24,7 +25,7 @@ for i = 1 : length(scenarios)
         [qmax(:,:,iyr),tmax(:,:,iyr)] = max(q2,[],3);
         fmax(:,:,iyr) = max(data.FLOODPLAIN_FRACTION,[],3);
     end
-    if ~exist('data','dir');
+    if ~exist('data','dir')
         mkdir('data');
     end
     save(['data/' tag{i} '_dmax.mat'],'qmax','tmax','fmax');
