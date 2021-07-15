@@ -7,9 +7,9 @@ scenarios = {'GFDL_FUT_1way_LLR3_7e85a10.2021-07-13-145042', ...
 tag = {'GFDL_FUT_1way','GFDL_FUT_2way'};
 
 for i = 1 : length(scenarios)
-    qmax = NaN(720,360,860);
-    tmax = NaN(720,360,860);
-    fmax = NaN(720,360,860);
+    qmax = NaN(720,360,86);
+    tmax = NaN(720,360,86);
+    fmax = NaN(720,360,86);
     for iyr = 1 : 86
         if iyr < 10 
             files = dir([wkdir scenarios{i} '/run/*mosart.h1.000' num2str(iyr) '*.nc']);
