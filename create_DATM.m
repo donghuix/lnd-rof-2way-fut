@@ -1,4 +1,4 @@
-function create_DATM(fname,longxy,latixy,date_tag,time,varnames,vars)
+function create_DATM(fname,longxy,latixy,date_tag,time,varnames,vars,template)
     ncid = netcdf.create(fname,'NETCDF4');
 % +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %
@@ -120,12 +120,27 @@ netcdf.putAtt(ncid,varid,'Created_on' ,datestr(now,'ddd mmm dd HH:MM:SS yyyy '))
 netcdf.endDef(ncid);
 
 netcdf.putVar(ncid,1-1,time);
-netcdf.putVar(ncid,2-1,longxy);
-netcdf.putVar(ncid,3-1,latixy);
-netcdf.putVar(ncid,4-1,360);
-netcdf.putVar(ncid,5-1,0);
-netcdf.putVar(ncid,6-1,-90);
-netcdf.putVar(ncid,7-1,90);
+if nargin == 8
+    longxy = ncread(template,'LONGXY');
+    latixy = ncread(template,'LATIXY');
+    EDGEE = ncread(template,'EDGEE');
+    EDGEN = ncread(template,'EDGEN');
+    EDGES = ncread(template,'EDGES');
+    EDGEW = ncread(template,'EDGEW');
+    netcdf.putVar(ncid,2-1,longxy);
+    netcdf.putVar(ncid,3-1,latixy);
+    netcdf.putVar(ncid,4-1,EDGEE);
+    netcdf.putVar(ncid,5-1,EDGEW);
+    netcdf.putVar(ncid,6-1,EDGES);
+    netcdf.putVar(ncid,7-1,EDGEN);
+else
+    netcdf.putVar(ncid,2-1,longxy);
+    netcdf.putVar(ncid,3-1,latixy);
+    netcdf.putVar(ncid,4-1,360);
+    netcdf.putVar(ncid,5-1,0);
+    netcdf.putVar(ncid,6-1,-90);
+    netcdf.putVar(ncid,7-1,90);
+end
 for i = 1 : length(varnames)
     netcdf.putVar(ncid,7+i-1,vars{i});
 end
