@@ -145,13 +145,13 @@ elseif OPT == 2
     figure;
     imagesc(flipud(1./(1-flood2_100)')); colorbar; caxis([0 200]); colormap(blue2red(11));
 
-    r3 = max(data2way.fmax(:,:,1:86),[],3) ./ max(data1way.fmax(:,:,1:86),[],3);
+    r3 = (nanmean(f2,3) - nanmean(f1,3)) ./ nanmean(f1,3);
     rtmp = r3;
     r3(1:360,:)   = rtmp(361:720,:);
     r3(361:720,:) = rtmp(1:360,:);
     figure;
     imagesc(flipud(r3')); colorbar;
-    caxis([0.9 1.1]); colormap(blue2red(121));
+    caxis([-0.1 0.1]); colormap(blue2red(121));
 
     r4 = nanmean(data2way.tmax(:,:,1:86) - data1way.tmax(:,:,1:86),3);
     rtmp = r4;
