@@ -88,6 +88,20 @@ for i = 1 : length(varnames)
             netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
             netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
             netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
+        case 'TMAX'
+            varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
+            netcdf.putAtt(ncid,ivar+i-1,'long_name','maximu daily temperature');
+            netcdf.putAtt(ncid,ivar+i-1,'units','K');
+            netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
+            netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
+        case 'TMIN'
+            varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
+            netcdf.putAtt(ncid,ivar+i-1,'long_name','min daily temperature');
+            netcdf.putAtt(ncid,ivar+i-1,'units','K');
+            netcdf.putAtt(ncid,ivar+i-1,'mode','time-dependent');
+            netcdf.defVarFill(ncid,ivar+i-1,false,1e36);
+            netcdf.putAtt(ncid,ivar+i-1,'missing_value',1e36);
         case 'WIND'
             varid(ivar+i) = netcdf.defVar(ncid,varnames{i},'NC_FLOAT',[dimid(2) dimid(3) dimid(4)]);
             netcdf.putAtt(ncid,ivar+i-1,'long_name','wind at the lowest atm level');
