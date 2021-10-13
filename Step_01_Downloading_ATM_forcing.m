@@ -29,12 +29,12 @@ str2 = '/daily/v20210512/';
 prefix = 'gfdl-esm4_r1i1p1f1_w5e5_';
 suffix = '_global_daily_';
 for i = 1 %: length(scenarios)
-    if ~exist(['./' scenarios{i}],'dir')
+    if ~exist(['./' Climate_forcing{iCf} '/' scenarios{i}],'dir')
         mkdir(['./' scenarios{i}]);
     end
     for j = 1 : length(vars)
-        if ~exist(['./' scenarios{i} '/' vars{j}],'dir')
-            mkdir(['./' scenarios{i} '/' vars{j}]);
+        if ~exist(['./'  Climate_forcing{iCf} '/' scenarios{i} '/' vars{j}],'dir')
+            mkdir(['./'  Climate_forcing{iCf} '/' scenarios{i} '/' vars{j}]);
         end
         if strcmp(scenarios{i},'historical')
             time_intervals = time_intervals1;
@@ -44,7 +44,7 @@ for i = 1 %: length(scenarios)
         
         for k = 1 : length(time_intervals)
             url = [str1 scenarios{i} '/' vars{j} str2 prefix scenarios{i} '_' vars{j} suffix time_intervals{k} '.nc'];
-            filename = ['./' scenarios{i} '/' vars{j} '/' prefix scenarios{i} '_' vars{j} suffix time_intervals{k} '.nc'];
+            filename = ['./'  Climate_forcing{iCf} '/' scenarios{i} '/' vars{j} '/' prefix scenarios{i} '_' vars{j} suffix time_intervals{k} '.nc'];
             if ~exist(filename,'file')
                 disp(['Downlowding ' filename]);
                 outfilename = websave(filename,url,options);
