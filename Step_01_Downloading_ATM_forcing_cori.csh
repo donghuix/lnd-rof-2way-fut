@@ -3,7 +3,7 @@
 #SBATCH --constraint=haswell
 #SBATCH --job-name=step_01              ## job_name
 #SBATCH --account=m3780                 ## project_name
-#SBATCH --time=20:00:00
+#SBATCH --time=48:00:00
 #SBATCH -q regular
 #SBATCH --nodes=1                       ## number_of_nodes
 #SBATCH --tasks-per-node=64             ## number_of_cores
