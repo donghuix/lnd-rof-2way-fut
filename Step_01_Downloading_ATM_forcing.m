@@ -28,10 +28,7 @@ str1 = ['http://esg.pik-potsdam.de/thredds/fileServer/isimip_dataroot/isimip3b/i
 str2 = '/daily/v20210512/';
 prefix = 'gfdl-esm4_r1i1p1f1_w5e5_';
 suffix = '_global_daily_';
-for i = 1 %: length(scenarios)
-    if ~exist(['./' Climate_forcing{iCf} '/' scenarios{i}],'dir')
-        mkdir(['./' scenarios{i}]);
-    end
+for i = 1 : length(scenarios)
     for j = 1 : length(vars)
         if ~exist(['./'  Climate_forcing{iCf} '/' scenarios{i} '/' vars{j}],'dir')
             mkdir(['./'  Climate_forcing{iCf} '/' scenarios{i} '/' vars{j}]);
