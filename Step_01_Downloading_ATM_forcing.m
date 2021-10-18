@@ -13,7 +13,7 @@ vars = {'hussAdjust',   ... % Specific humidty     [kg kg-1]
         'tasmaxAdjust', ... % Max air temperature
         'tasminAdjust'};    % Min air temperature 
     
-scenarios = {'historical','ssp370','ssp585'};
+scenarios = {'historical','ssp126','ssp370','ssp585'};
 
 time_intervals1 = {'1951_1960', '1961_1970','1971_1980','1981_1990'}; 
                   % '1911_1920','1921_1930','1931_1940','1941_1950'
@@ -26,7 +26,7 @@ Climate_forcing = {'GFDL-ESM4','IPSL-CM6A-LR','MPI-ESM1-2-HR','MRI-ESM2-0','UKES
 iCf = 1;
 str1 = ['http://esg.pik-potsdam.de/thredds/fileServer/isimip_dataroot/isimip3b/input/clim_atm_sim/W5E5-ISIMIP3BASD2-5-0/' Climate_forcing{iCf} '/'];
 str2 = '/daily/v20210512/';
-prefix = 'gfdl-esm4_r1i1p1f1_w5e5_';
+prefix = [lower(Climate_forcing{iCf}) '_r1i1p1f1_w5e5_'];
 suffix = '_global_daily_';
 for i = 1 : length(scenarios)
     for j = 1 : length(vars)
@@ -45,6 +45,8 @@ for i = 1 : length(scenarios)
             if ~exist(filename,'file')
                 disp(['Downlowding ' filename]);
                 outfilename = websave(filename,url,options);
+	    else
+		disp([filename ' is already downloaded!']);
             end
         end
     end
