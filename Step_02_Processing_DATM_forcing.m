@@ -1,19 +1,49 @@
 clear;close all;clc;
 
-scenarios = {'historical','ssp370','ssp585'};
+scenarios = {'historical','ssp126','ssp370','ssp585'};
 
-time_intervals1 = {'1911_1920','1921_1930','1931_1940','1941_1950','1951_1960', ...
-                   '1961_1970','1971_1980','1981_1990','1991_2000','2001_2010', ...
-                   '2011_2014'};
-time_intervals2 = {'2015_2020','2021_2030','2031_2040','2041_2050','2051_2060', ...
-                   '2061_2070','2071_2080','2081_2090','2091_2100'};
-
-longxy = ncread('/compyfs/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v1.c170516/Precip/clmforc.GSWP3.c2011.0.5x0.5.Prec.1912-05.nc','LONGXY');
-latixy = ncread('/compyfs/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v1.c170516/Precip/clmforc.GSWP3.c2011.0.5x0.5.Prec.1912-05.nc','LATIXY');
+time_intervals1 = {'1981_1990','1991_2000','2001_2010'};
+                  %'1911_1920','1921_1930','1931_1940','1941_1950','1951_1960', ...
+                  %'1961_1970','1971_1980', '2011_2014'
+                  
+time_intervals2 = {'2071_2080','2081_2090','2091_2100'};
+                  %'2015_2020','2021_2030','2031_2040','2041_2050','2051_2060', ...
+                  %'2061_2070',
 
 model = 'gfdl-esm4';
 
 tag = {'Prec','Solr','TPQWL'};
+
+if ~exist('hr_temp_diurnal.mat','file')
+    hr_max = NaN(720,360,12);
+    hr_min = NaN(720,360,12);
+    for i = 1 : 12
+        if i <10
+            fname = ['/compyfs/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v1.c170516/TPHWL3Hrly/clmforc.GSWP3.c2011.0.5x0.5.TPQWL.2000-0' num2str(i) '.nc'];
+        else
+            fname = ['/compyfs/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v1.c170516/TPHWL3Hrly/clmforc.GSWP3.c2011.0.5x0.5.TPQWL.2000-'  num2str(i) '.nc'];
+        end
+        disp(['Processing ' fname]);
+        if i == 1
+            hr_lon = ncread(fname,'LONGXY');
+            hr_lat = ncread(fname,'LATIXY');
+        end
+        
+        TBOT = ncread(fname,'TBOT');
+        for i2 = 1 : 720
+            disp(i2);
+            for j2 = 1 : 360
+                tbot = TBOT(i2,j2,:);
+                tbot = reshape(tbot(:),[8,length(tbot(:))/8]);
+                hr_max(i2,j2,i) = nanmean(max(tbot,[],1));
+                hr_min(i2,j2,i) = nanmean(min(tbot,[],1));
+            end
+        end
+    end
+    save('hr_temp_diurnal.mat','hr_max','hr_min','hr_lon','hr_lat');
+else
+    load('hr_temp_diurnal.mat');
+end
 
 for i = 1 : length(scenarios)
     switch scenarios{i}
@@ -42,7 +72,15 @@ for i = 1 : length(scenarios)
             [yr,mo,da] = datevec(t);
             varall = cell(length(varread),1);
             for ivar = 1 : length(varread)
-                varall{ivar} = ncread([scenarios{i} '/' varread{ivar} '/' model '_r1i1p1f1_w5e5_' scenarios{i} '_' varread{ivar} '_global_daily_' time_intervals{k} '.nc'],varread{ivar});
+                filename = [scenarios{i} '/' varread{ivar} '/' model '_r1i1p1f1_w5e5_' scenarios{i} '_' varread{ivar} '_global_daily_' time_intervals{k} '.nc'];
+                varall{ivar} = ncread(filename,varread{ivar});
+                if i == 1 && j == 1 && k == 1 && ivar == 1
+                    lon = ncread(filename,'lon');
+                    lat = ncread(filename,'lat');
+                    [longxy,latixy] = meshgrid(lon,lat); 
+                    longxy = longxy';
+                    latixy = latixy';
+                end
             end
             nyrs = length(unique(yr));
             for iy = min(yr) : max(yr)
