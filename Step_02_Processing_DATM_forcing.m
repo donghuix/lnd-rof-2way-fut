@@ -49,6 +49,17 @@ else
     load('hr_temp_diurnal.mat');
 end
 
+hr_max = round(hr_max);
+hr_min = round(hr_min);
+tmp = hr_max;
+hr_max(1:360,:,:) = tmp(361:720,:,:);
+hr_max(361:720,:,:) = tmp(1:360,:,:);
+
+tmp = hr_min;
+hr_min(1:360,:,:) = tmp(361:720,:,:);
+hr_min(361:720,:,:) = tmp(1:360,:,:);
+clear tmp;
+
 for i = 1 : length(scenarios)
     switch scenarios{i}
         case 'historical'
@@ -88,11 +99,43 @@ for i = 1 : length(scenarios)
                 for im = 1 : 12
                     if im < 10
                         datetag = [num2str(iy) '-0' num2str(im) '-01'];
+                        switch scenarios{i}
+                            case 'historical'
+                                datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
+                            case 'ssp126'
+                                datetag2 = [num2str(iy-60) '-0' num2str(im) '-01'];
+                            case 'ssp370'
+                                datetag2 = [num2str(iy-30) '-0' num2str(im) '-01'];
+                            case 'ssp585'
+                                datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
+                            otherwise 
+                                error('This scenario is not selected!');
+                        end
                     else
                         datetag = [num2str(iy) '-' num2str(im) '-01'];
+                        switch scenarios{i}
+                            case 'historical'
+                                datetag2 = [num2str(iy) '-' num2str(im) '-01'];
+                            case 'ssp126'
+                                datetag2 = [num2str(iy-60) '-' num2str(im) '-01'];
+                            case 'ssp370'
+                                datetag2 = [num2str(iy-30) '-' num2str(im) '-01'];
+                            case 'ssp585'
+                                datetag2 = [num2str(iy) '-' num2str(im) '-01'];
+                            otherwise 
+                                error('This scenario is not selected!');
+                        end
                     end
                     vars = cell(length(varread),1);
                     ind = find(yr == iy & mo == im);
+                    
+                    if im == 2
+                        numd = 28;
+                    else
+                        numd = length(ind);
+                    end
+                    tday = 0.5 : 1 : numd - 0.5;
+                    
                     for ivar = 1 : length(varread)
                         tmp1 = varall{ivar}(:,:,ind);
                         % switch longitude
@@ -100,18 +143,16 @@ for i = 1 : length(scenarios)
                             tmp1 = tmp1(:,:,1:28);
                         end
                         tmp = tmp1;
-                        tmp(1:360,:,:) = tmp1(361:720,:,:);
-                        tmp(361:720,:,:) = tmp1(1:360,:,:);
                         vars{ivar} = tmp;
                     end
                     folder = ['/compyfs/icom/xudo627/' model '/' scenarios{i} '/' tag{j}];
                     if ~exist(folder,'dir')
                         mkdir(folder);
                     end
-                    fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.' tag{j} '.' datetag(1:7) '.nc'];
+                    fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
                     disp(['Generating ' fname]);
                     if ~exist(fname,'file')
-                        create_DATM(fname,longxy,latixy,datetag,0:size(tmp,3)-1,varnames,vars);
+                        create_DATM(fname,longxy,latixy,datetag2,tday,varnames,vars);
                     end
                 end
             end
@@ -127,15 +168,13 @@ for i = 1 : length(scenarios)
             time_intervals = time_intervals2;
     end
     
-    varnames = {'PSRF','TBOT','WIND','QBOT','FLDS'};
-    varread  = {'psAdjust','tasAdjust','sfcWindAdjust','hussAdjust','rldsAdjust'};
+    varnames = {'PSRF','TBOT','WIND','QBOT'};
 
     for k = 1 : length(time_intervals)
         t1 = datenum(str2num(time_intervals{k}(1:4)),1,1,0,0,0);
         t2 = datenum(str2num(time_intervals{k}(6:9)),12,31,0,0,0);
         t  = t1 : t2;
         [yr,mo,da] = datevec(t);
-        varall = cell(length(varread),1);
         
         filename1 = [scenarios{i} '/psAdjust/'      model '_r1i1p1f1_w5e5_' scenarios{i} '_psAdjust_global_daily_'      time_intervals{k} '.nc'];
         filename2 = [scenarios{i} '/sfcWindAdjust/' model '_r1i1p1f1_w5e5_' scenarios{i} '_sfcWindAdjust_global_daily_' time_intervals{k} '.nc'];
@@ -163,8 +202,32 @@ for i = 1 : length(scenarios)
             for im = 1 : 12
                 if im < 10
                     datetag = [num2str(iy) '-0' num2str(im) '-01'];
+                    switch scenarios{i}
+                        case 'historical'
+                            datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
+                        case 'ssp126'
+                            datetag2 = [num2str(iy-60) '-0' num2str(im) '-01'];
+                        case 'ssp370'
+                            datetag2 = [num2str(iy-30) '-0' num2str(im) '-01'];
+                        case 'ssp585'
+                            datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
+                        otherwise 
+                            error('This scenario is not selected!');
+                    end
                 else
                     datetag = [num2str(iy) '-' num2str(im) '-01'];
+                    switch scenarios{i}
+                        case 'historical'
+                            datetag2 = [num2str(iy) '-' num2str(im) '-01'];
+                        case 'ssp126'
+                            datetag2 = [num2str(iy-60) '-' num2str(im) '-01'];
+                        case 'ssp370'
+                            datetag2 = [num2str(iy-30) '-' num2str(im) '-01'];
+                        case 'ssp585'
+                            datetag2 = [num2str(iy) '-' num2str(im) '-01'];
+                        otherwise 
+                            error('This scenario is not selected!');
+                    end
                 end
                 P3h = NaN(720,360,days_of_month(im)*8);
                 W3h = NaN(720,360,days_of_month(im)*8);
@@ -189,18 +252,37 @@ for i = 1 : length(scenarios)
                     P3h(:,:,(id-1)*8+1:id*8) = Pday(:,:,id);
                     W3h(:,:,(id-1)*8+1:id*8) = Wday(:,:,id);
                     Q3h(:,:,(id-1)*8+1:id*8) = Qday(:,:,id);
-                    
+                    for i2 = 1 : 720
+                        for j2 = 1 : 360
+                            T3h(i2,j2,(id-1)*8 + hr_max(i2,j2,im)) = Tmaxday(i2,j2,id);
+                            T3h(i2,j2,(id-1)*8 + hr_min(i2,j2,im)) = Tminday(i2,j2,id);
+                        end
+                    end
+                end
+                for i2 = 1 : 720
+                    for j2 = 1 : 360
+                        tmp = T3h(i2,j2,:); 
+                        tmp = tmp(:);
+                        inotnan = find(~isnan(tmp));
+                        T3h(i2,j2,:) = interp1(t3h(inotnan),tmp(inotnan),t3h,'spline','extrap');
+                    end
                 end
                 
-
-                folder = ['/compyfs/icom/xudo627/' model '/' scenarios{i} '/' tag{j}];
+                vars = cell(4,1);
+                vars{1} = P3h;
+                vars{2} = T3h;
+                vars{3} = W3h;
+                vars{4} = Q3h;
+                
+                folder = ['/compyfs/icom/xudo627/' model '/' tag{j}];
                 if ~exist(folder,'dir')
                     mkdir(folder);
                 end
-                fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.' tag{j} '.' datetag(1:7) '.nc'];
+                %fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.' tag{j} '.' datetag(1:7) '.nc'];
+                fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
                 disp(['Generating ' fname]);
                 if ~exist(fname,'file')
-                    create_DATM(fname,longxy,latixy,datetag,t3h',varnames,vars);
+                    create_DATM(fname,longxy,latixy,datetag2,t3h',varnames,vars);
                 end
             end
         end
