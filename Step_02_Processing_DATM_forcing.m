@@ -83,6 +83,18 @@ for i = 1 : length(scenarios)
             t  = t1 : t2;
             [yr,mo,da] = datevec(t);
             varall = cell(length(varread),1);
+            process_this_file = 0;
+            for iy = min(yr) : max(yr)
+                for im = 1 : 12
+                    folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
+                    fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
+                    if ~exist(fname,'file')
+                        process_this_file = 1;
+                    end
+                end
+            end
+            fprintf([model ' ' scenarios{i} ' ' tag{j} ' ' time_intervals{k} ' is not processed yet... Start to process:\n']);
+            
             for ivar = 1 : length(varread)
                 filename = [upper(model) '/' scenarios{i} '/' varread{ivar} '/' model '_r1i1p1f1_w5e5_' scenarios{i} '_' varread{ivar} '_global_daily_' time_intervals{k} '.nc'];
                 varall{ivar} = ncread(filename,varread{ivar});
@@ -176,6 +188,18 @@ for i = 1 : length(scenarios)
         t  = t1 : t2;
         [yr,mo,da] = datevec(t);
         
+        process_this_file = 0;
+        for iy = min(yr) : max(yr)
+            for im = 1 : 12
+                folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
+                fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
+                if ~exist(fname,'file')
+                    process_this_file = 1;
+                end
+            end
+        end
+        fprintf([model ' ' scenarios{i} ' ' tag{j} ' ' time_intervals{k} ' is not processed yet... Start to process:\n']);
+            
         filename1 = [upper(model) '/' scenarios{i} '/psAdjust/'      model '_r1i1p1f1_w5e5_' scenarios{i} '_psAdjust_global_daily_'      time_intervals{k} '.nc'];
         filename2 = [upper(model) '/' scenarios{i} '/sfcWindAdjust/' model '_r1i1p1f1_w5e5_' scenarios{i} '_sfcWindAdjust_global_daily_' time_intervals{k} '.nc'];
         filename3 = [upper(model) '/' scenarios{i} '/hussAdjust/'    model '_r1i1p1f1_w5e5_' scenarios{i} '_hussAdjust_global_daily_'    time_intervals{k} '.nc'];
