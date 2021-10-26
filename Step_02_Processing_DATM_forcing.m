@@ -171,8 +171,8 @@ for i = 1 : length(scenarios)
         for iy = min(yr) : max(yr)
             for im = 1 : 12
                 [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
-                folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
-                fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
+                folder = ['./data/forcings/' model '/' scenarios{i} '/TPQWL'];
+                fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.TPQWL.' datetag2(1:7) '.nc'];
                 if ~exist(fname,'file')
                     process_this_file = 1;
                 end
@@ -181,7 +181,7 @@ for i = 1 : length(scenarios)
         
         if process_this_file
             
-        fprintf([model ' ' scenarios{i} ' ' tag{j} ' ' time_intervals{k} ' is not processed yet... Start to process:\n']);
+        fprintf([model ' ' scenarios{i} ' TPQWL ' time_intervals{k} ' is not processed yet... Start to process:\n']);
             
         filename1 = [upper(model) '/' scenarios{i} '/psAdjust/'      model '_r1i1p1f1_w5e5_' scenarios{i} '_psAdjust_global_daily_'      time_intervals{k} '.nc'];
         filename2 = [upper(model) '/' scenarios{i} '/sfcWindAdjust/' model '_r1i1p1f1_w5e5_' scenarios{i} '_sfcWindAdjust_global_daily_' time_intervals{k} '.nc'];
@@ -254,12 +254,12 @@ for i = 1 : length(scenarios)
                 vars{3} = W3h;
                 vars{4} = Q3h;
                 
-                folder = ['./data/forcings/' model '/' tag{j}];
+                folder = ['./data/forcings/' model '/TPQWL'];
                 if ~exist(folder,'dir')
                     mkdir(folder);
                 end
                 %fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.' tag{j} '.' datetag(1:7) '.nc'];
-                fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
+                fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.TPQWL.' datetag2(1:7) '.nc'];
                 disp(['Generating ' fname]);
                 if ~exist(fname,'file')
                     create_DATM(fname,longxy,latixy,datetag2,t3h',varnames,vars);
