@@ -84,7 +84,7 @@ for i = 1 : length(scenarios)
             [yr,mo,da] = datevec(t);
             varall = cell(length(varread),1);
             for ivar = 1 : length(varread)
-                filename = [scenarios{i} '/' varread{ivar} '/' model '_r1i1p1f1_w5e5_' scenarios{i} '_' varread{ivar} '_global_daily_' time_intervals{k} '.nc'];
+                filename = [uppder(model) '/' scenarios{i} '/' varread{ivar} '/' model '_r1i1p1f1_w5e5_' scenarios{i} '_' varread{ivar} '_global_daily_' time_intervals{k} '.nc'];
                 varall{ivar} = ncread(filename,varread{ivar});
                 if i == 1 && j == 1 && k == 1 && ivar == 1
                     lon = ncread(filename,'lon');
@@ -176,11 +176,11 @@ for i = 1 : length(scenarios)
         t  = t1 : t2;
         [yr,mo,da] = datevec(t);
         
-        filename1 = [scenarios{i} '/psAdjust/'      model '_r1i1p1f1_w5e5_' scenarios{i} '_psAdjust_global_daily_'      time_intervals{k} '.nc'];
-        filename2 = [scenarios{i} '/sfcWindAdjust/' model '_r1i1p1f1_w5e5_' scenarios{i} '_sfcWindAdjust_global_daily_' time_intervals{k} '.nc'];
-        filename3 = [scenarios{i} '/hussAdjust/'    model '_r1i1p1f1_w5e5_' scenarios{i} '_hussAdjust_global_daily_'    time_intervals{k} '.nc'];
-        filename4 = [scenarios{i} '/tasmaxAdjust/'  model '_r1i1p1f1_w5e5_' scenarios{i} '_tasmaxAdjust_global_daily_'  time_intervals{k} '.nc'];
-        filename5 = [scenarios{i} '/tasminAdjust/'  model '_r1i1p1f1_w5e5_' scenarios{i} '_tasminAdjust_global_daily_'  time_intervals{k} '.nc'];
+        filename1 = [uppder(model) '/' scenarios{i} '/psAdjust/'      model '_r1i1p1f1_w5e5_' scenarios{i} '_psAdjust_global_daily_'      time_intervals{k} '.nc'];
+        filename2 = [uppder(model) '/' scenarios{i} '/sfcWindAdjust/' model '_r1i1p1f1_w5e5_' scenarios{i} '_sfcWindAdjust_global_daily_' time_intervals{k} '.nc'];
+        filename3 = [uppder(model) '/' scenarios{i} '/hussAdjust/'    model '_r1i1p1f1_w5e5_' scenarios{i} '_hussAdjust_global_daily_'    time_intervals{k} '.nc'];
+        filename4 = [uppder(model) '/' scenarios{i} '/tasmaxAdjust/'  model '_r1i1p1f1_w5e5_' scenarios{i} '_tasmaxAdjust_global_daily_'  time_intervals{k} '.nc'];
+        filename5 = [uppder(model) '/' scenarios{i} '/tasminAdjust/'  model '_r1i1p1f1_w5e5_' scenarios{i} '_tasminAdjust_global_daily_'  time_intervals{k} '.nc'];
         
         psAdjust      = ncread(filename1,'psAdjust');
         sfcWindAdjust = ncread(filename2,'sfcWindAdjust');
