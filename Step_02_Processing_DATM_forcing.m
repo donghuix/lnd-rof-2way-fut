@@ -86,6 +86,7 @@ for i = 1 : length(scenarios)
             process_this_file = 0;
             for iy = min(yr) : max(yr)
                 for im = 1 : 12
+                    [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
                     folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
                     fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
                     if ~exist(fname,'file')
@@ -109,35 +110,7 @@ for i = 1 : length(scenarios)
             nyrs = length(unique(yr));
             for iy = min(yr) : max(yr)
                 for im = 1 : 12
-                    if im < 10
-                        datetag = [num2str(iy) '-0' num2str(im) '-01'];
-                        switch scenarios{i}
-                            case 'historical'
-                                datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
-                            case 'ssp126'
-                                datetag2 = [num2str(iy-60) '-0' num2str(im) '-01'];
-                            case 'ssp370'
-                                datetag2 = [num2str(iy-30) '-0' num2str(im) '-01'];
-                            case 'ssp585'
-                                datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
-                            otherwise 
-                                error('This scenario is not selected!');
-                        end
-                    else
-                        datetag = [num2str(iy) '-' num2str(im) '-01'];
-                        switch scenarios{i}
-                            case 'historical'
-                                datetag2 = [num2str(iy) '-' num2str(im) '-01'];
-                            case 'ssp126'
-                                datetag2 = [num2str(iy-60) '-' num2str(im) '-01'];
-                            case 'ssp370'
-                                datetag2 = [num2str(iy-30) '-' num2str(im) '-01'];
-                            case 'ssp585'
-                                datetag2 = [num2str(iy) '-' num2str(im) '-01'];
-                            otherwise 
-                                error('This scenario is not selected!');
-                        end
-                    end
+                    [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
                     vars = cell(length(varread),1);
                     ind = find(yr == iy & mo == im);
                     
@@ -191,6 +164,7 @@ for i = 1 : length(scenarios)
         process_this_file = 0;
         for iy = min(yr) : max(yr)
             for im = 1 : 12
+                [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
                 folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
                 fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
                 if ~exist(fname,'file')
@@ -224,35 +198,8 @@ for i = 1 : length(scenarios)
         
         for iy = min(yr) : max(yr)
             for im = 1 : 12
-                if im < 10
-                    datetag = [num2str(iy) '-0' num2str(im) '-01'];
-                    switch scenarios{i}
-                        case 'historical'
-                            datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
-                        case 'ssp126'
-                            datetag2 = [num2str(iy-60) '-0' num2str(im) '-01'];
-                        case 'ssp370'
-                            datetag2 = [num2str(iy-30) '-0' num2str(im) '-01'];
-                        case 'ssp585'
-                            datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
-                        otherwise 
-                            error('This scenario is not selected!');
-                    end
-                else
-                    datetag = [num2str(iy) '-' num2str(im) '-01'];
-                    switch scenarios{i}
-                        case 'historical'
-                            datetag2 = [num2str(iy) '-' num2str(im) '-01'];
-                        case 'ssp126'
-                            datetag2 = [num2str(iy-60) '-' num2str(im) '-01'];
-                        case 'ssp370'
-                            datetag2 = [num2str(iy-30) '-' num2str(im) '-01'];
-                        case 'ssp585'
-                            datetag2 = [num2str(iy) '-' num2str(im) '-01'];
-                        otherwise 
-                            error('This scenario is not selected!');
-                    end
-                end
+                [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
+                
                 P3h = NaN(720,360,days_of_month(im)*8);
                 W3h = NaN(720,360,days_of_month(im)*8);
                 Q3h = NaN(720,360,days_of_month(im)*8);
@@ -309,6 +256,38 @@ for i = 1 : length(scenarios)
                     create_DATM(fname,longxy,latixy,datetag2,t3h',varnames,vars);
                 end
             end
+        end
+    end
+end
+
+function [datetag,datetag2] = get_datetag(iy,im,scenario)
+    if im < 10
+        datetag = [num2str(iy) '-0' num2str(im) '-01'];
+        switch scenario
+            case 'historical'
+                datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
+            case 'ssp126'
+                datetag2 = [num2str(iy-60) '-0' num2str(im) '-01'];
+            case 'ssp370'
+                datetag2 = [num2str(iy-30) '-0' num2str(im) '-01'];
+            case 'ssp585'
+                datetag2 = [num2str(iy) '-0' num2str(im) '-01'];
+            otherwise 
+                error('This scenario is not selected!');
+        end
+    else
+        datetag = [num2str(iy) '-' num2str(im) '-01'];
+        switch scenario
+            case 'historical'
+                datetag2 = [num2str(iy) '-' num2str(im) '-01'];
+            case 'ssp126'
+                datetag2 = [num2str(iy-60) '-' num2str(im) '-01'];
+            case 'ssp370'
+                datetag2 = [num2str(iy-30) '-' num2str(im) '-01'];
+            case 'ssp585'
+                datetag2 = [num2str(iy) '-' num2str(im) '-01'];
+            otherwise 
+                error('This scenario is not selected!');
         end
     end
 end
