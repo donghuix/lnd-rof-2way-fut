@@ -94,6 +94,9 @@ for i = 1 : length(scenarios)
                     end
                 end
             end
+            
+            if process_this_file
+                
             fprintf([model ' ' scenarios{i} ' ' tag{j} ' ' time_intervals{k} ' is not processed yet... Start to process:\n']);
             
             for ivar = 1 : length(varread)
@@ -141,6 +144,9 @@ for i = 1 : length(scenarios)
                     end
                 end
             end
+            else
+            fprintf([model ' ' scenarios{i} ' ' tag{j} ' ' time_intervals{k} ' is already processed!\n']);
+            end
         end
     end
 end
@@ -172,6 +178,9 @@ for i = 1 : length(scenarios)
                 end
             end
         end
+        
+        if process_this_file
+            
         fprintf([model ' ' scenarios{i} ' ' tag{j} ' ' time_intervals{k} ' is not processed yet... Start to process:\n']);
             
         filename1 = [upper(model) '/' scenarios{i} '/psAdjust/'      model '_r1i1p1f1_w5e5_' scenarios{i} '_psAdjust_global_daily_'      time_intervals{k} '.nc'];
@@ -256,6 +265,8 @@ for i = 1 : length(scenarios)
                     create_DATM(fname,longxy,latixy,datetag2,t3h',varnames,vars);
                 end
             end
+        end
+        fprintf([model ' ' scenarios{i} ' TPQWL ' time_intervals{k} ' is already processed!\n']);
         end
     end
 end
