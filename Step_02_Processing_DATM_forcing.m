@@ -145,7 +145,7 @@ for i = 1 : length(scenarios)
                         tmp = tmp1;
                         vars{ivar} = tmp;
                     end
-                    folder = ['/compyfs/icom/xudo627/' model '/' scenarios{i} '/' tag{j}];
+                    folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
                     if ~exist(folder,'dir')
                         mkdir(folder);
                     end
@@ -274,7 +274,7 @@ for i = 1 : length(scenarios)
                 vars{3} = W3h;
                 vars{4} = Q3h;
                 
-                folder = ['/compyfs/icom/xudo627/' model '/' tag{j}];
+                folder = ['./data/forcings/' model '/' tag{j}];
                 if ~exist(folder,'dir')
                     mkdir(folder);
                 end
