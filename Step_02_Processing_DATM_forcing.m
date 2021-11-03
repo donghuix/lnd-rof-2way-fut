@@ -229,9 +229,9 @@ for i = 1 : length(scenarios)
                 t3h = 1/8/2 : 1/8 : numd - 1/8/2;
                 
                 for id = 1 : numd
-                    P3h(:,:,(id-1)*8+1:id*8) = Pday(:,:,id);
-                    W3h(:,:,(id-1)*8+1:id*8) = Wday(:,:,id);
-                    Q3h(:,:,(id-1)*8+1:id*8) = Qday(:,:,id);
+                    P3h(:,:,(id-1)*8+1:id*8) = repmat(Pday(:,:,id),1,1,8);
+                    W3h(:,:,(id-1)*8+1:id*8) = repmat(Wday(:,:,id),1,1,8);
+                    Q3h(:,:,(id-1)*8+1:id*8) = repmat(Qday(:,:,id),1,1,8);
                     for i2 = 1 : 720
                         for j2 = 1 : 360
                             T3h(i2,j2,(id-1)*8 + hr_max(i2,j2,im)) = Tmaxday(i2,j2,id);
@@ -254,7 +254,7 @@ for i = 1 : length(scenarios)
                 vars{3} = W3h;
                 vars{4} = Q3h;
                 
-                folder = ['./data/forcings/' model '/TPQWL'];
+                folder = ['./data/forcings/' model '/' scenarios{i} '/TPQWL'];
                 if ~exist(folder,'dir')
                     mkdir(folder);
                 end
