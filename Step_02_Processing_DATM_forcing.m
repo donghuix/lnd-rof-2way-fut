@@ -54,10 +54,12 @@ hr_min = round(hr_min);
 tmp = hr_max;
 hr_max(1:360,:,:) = tmp(361:720,:,:);
 hr_max(361:720,:,:) = tmp(1:360,:,:);
+hr_max = flip(hr_max,2);
 
 tmp = hr_min;
 hr_min(1:360,:,:) = tmp(361:720,:,:);
 hr_min(361:720,:,:) = tmp(1:360,:,:);
+hr_min = flip(hr_min,2);
 clear tmp;
 
 for i = 1 : length(scenarios)
@@ -234,11 +236,22 @@ for i = 1 : length(scenarios)
                     Q3h(:,:,(id-1)*8+1:id*8) = repmat(Qday(:,:,id),1,1,8);
                     for i2 = 1 : 720
                         for j2 = 1 : 360
-                            T3h(i2,j2,(id-1)*8 + hr_max(i2,j2,im)) = Tmaxday(i2,j2,id);
-                            T3h(i2,j2,(id-1)*8 + hr_min(i2,j2,im)) = Tminday(i2,j2,id);
+                            T3h(i2,j2,(id-1)*8 + 5) = Tmaxday(i2,j2,id);
+                            T3h(i2,j2,(id-1)*8 + 2) = Tminday(i2,j2,id);
+                            if id == numd
+                                T3h(i2,j2,(id-1)*8 + 7) = (Tmaxday(i2,j2,id) + Tminday(i2,j2,id))/2;
+                            end
+%                             if abs(hr_max(i2,j2,1) - hr_min(i2,j2,1)) <= 2
+%                                 T3h(i2,j2,(id-1)*8 + 5) = Tmaxday(i2,j2,id);
+%                                 T3h(i2,j2,(id-1)*8 + 2) = Tminday(i2,j2,id);
+%                             else
+%                                 T3h(i2,j2,(id-1)*8 + hr_max(i2,j2,im)) = Tmaxday(i2,j2,id);
+%                                 T3h(i2,j2,(id-1)*8 + hr_min(i2,j2,im)) = Tminday(i2,j2,id);
+%                             end
                         end
                     end
                 end
+                
                 for i2 = 1 : 720
                     for j2 = 1 : 360
                         tmp = T3h(i2,j2,:); 
