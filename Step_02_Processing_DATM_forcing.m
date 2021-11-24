@@ -10,7 +10,7 @@ time_intervals2 = {'2071_2080','2081_2090','2091_2100'};
                   %'2015_2020','2021_2030','2031_2040','2041_2050','2051_2060', ...
                   %'2061_2070',
 
-model = 'gfdl-esm4';
+model = 'mpi-esm1-2-hr';
 
 days_of_month = [31; 28; 31; 30; 31; 30; 31; 31; 30; 31; 30; 31];
 
@@ -87,7 +87,7 @@ for i = 1 : length(scenarios)
             for iy = min(yr) : max(yr)
                 for im = 1 : 12
                     [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
-                    folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
+                    folder = ['./data/forcings/' model '/' tag{j}];
                     fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
                     if ~exist(fname,'file')
                         process_this_file = 1;
@@ -133,7 +133,7 @@ for i = 1 : length(scenarios)
                         tmp = tmp1;
                         vars{ivar} = tmp;
                     end
-                    folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
+                    folder = ['./data/forcings/' model '/' tag{j}];
                     if ~exist(folder,'dir')
                         mkdir(folder);
                     end
@@ -171,7 +171,7 @@ for i = 1 : length(scenarios)
         for iy = min(yr) : max(yr)
             for im = 1 : 12
                 [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
-                folder = ['./data/forcings/' model '/' scenarios{i} '/TPQWL'];
+                folder = ['./data/forcings/' model '/TPQWL'];
                 fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.TPQWL.' datetag2(1:7) '.nc'];
                 if ~exist(fname,'file')
                     process_this_file = 1;
@@ -254,7 +254,7 @@ for i = 1 : length(scenarios)
                 vars{3} = W3h;
                 vars{4} = Q3h;
                 
-                folder = ['./data/forcings/' model '/' scenarios{i} '/TPQWL'];
+                folder = ['./data/forcings/' model '/TPQWL'];
                 if ~exist(folder,'dir')
                     mkdir(folder);
                 end
