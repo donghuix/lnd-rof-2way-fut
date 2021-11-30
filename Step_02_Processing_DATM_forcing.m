@@ -10,7 +10,7 @@ time_intervals2 = {'2071_2080','2081_2090','2091_2100'};
                   %'2015_2020','2021_2030','2031_2040','2041_2050','2051_2060', ...
                   %'2061_2070',
 
-model = 'mpi-esm1-2-hr';
+model = 'gfdl-esm4';
 
 days_of_month = [31; 28; 31; 30; 31; 30; 31; 31; 30; 31; 30; 31];
 
@@ -197,14 +197,12 @@ for i = 1 : length(scenarios)
         tasmaxAdjust  = ncread(filename4,'tasmaxAdjust');
         tasminAdjust  = ncread(filename5,'tasminAdjust');
         
-        if i == 1 && k == 1 
-            lon = ncread(filename1,'lon');
-            lat = ncread(filename1,'lat');
-            [longxy,latixy] = meshgrid(lon,lat); 
-            longxy = longxy';
-            latixy = latixy';
-        end
-            
+        lon = ncread(filename1,'lon');
+        lat = ncread(filename1,'lat');
+        [longxy,latixy] = meshgrid(lon,lat); 
+        longxy = longxy';
+        latixy = latixy';
+        
         nyrs = length(unique(yr));
         
         for iy = min(yr) : max(yr)
