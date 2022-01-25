@@ -2,13 +2,10 @@ clear;close all;clc;
 
 scenarios = {'historical','ssp126','ssp370','ssp585'};
 
-time_intervals1 = {'1971_1980','1981_1990','1991_2000','2001_2010'};
-                  %'1911_1920','1921_1930','1931_1940','1941_1950','1951_1960', ...
-                  %'1961_1970','1971_1980', '2011_2014'
+time_intervals1 = {'1951_1960','1961_1970','1971_1980','1981_1990','1991_2000','2001_2010','2011_2014'};
+                  %'1911_1920','1921_1930','1931_1940','1941_1950', ...
                   
-time_intervals2 = {'2071_2080','2081_2090','2091_2100'};
-                  %'2015_2020','2021_2030','2031_2040','2041_2050','2051_2060', ...
-                  %'2061_2070',
+time_intervals2 = {'2015_2020','2021_2030','2031_2040','2041_2050','2051_2060','2061_2070','2071_2080','2081_2090','2091_2100'};
 
 model = 'gfdl-esm4';
 
@@ -89,8 +86,9 @@ for i = 1 : length(scenarios)
             for iy = min(yr) : max(yr)
                 for im = 1 : 12
                     [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
-                    folder = ['./data/forcings/' model '/' tag{j}];
-                    fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
+                    folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
+                    fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.' tag{j} '.' datetag(1:7) '.nc'];
+                    %fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
                     if ~exist(fname,'file')
                         process_this_file = 1;
                     end
@@ -104,7 +102,7 @@ for i = 1 : length(scenarios)
             for ivar = 1 : length(varread)
                 filename = [upper(model) '/' scenarios{i} '/' varread{ivar} '/' model '_r1i1p1f1_w5e5_' scenarios{i} '_' varread{ivar} '_global_daily_' time_intervals{k} '.nc'];
                 varall{ivar} = ncread(filename,varread{ivar});
-                if i == 1 && j == 1 && k == 1 && ivar == 1
+                if ivar == 1
                     lon = ncread(filename,'lon');
                     lat = ncread(filename,'lat');
                     [longxy,latixy] = meshgrid(lon,lat); 
@@ -135,11 +133,12 @@ for i = 1 : length(scenarios)
                         tmp = tmp1;
                         vars{ivar} = tmp;
                     end
-                    folder = ['./data/forcings/' model '/' tag{j}];
+                    folder = ['./data/forcings/' model '/' scenarios{i} '/' tag{j}];
                     if ~exist(folder,'dir')
                         mkdir(folder);
                     end
-                    fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
+                    fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.' tag{j} '.' datetag(1:7) '.nc'];
+                    %fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.' tag{j} '.' datetag2(1:7) '.nc'];
                     disp(['Generating ' fname]);
                     if ~exist(fname,'file')
                         create_DATM(fname,longxy,latixy,datetag2,tday,varnames,vars);
@@ -173,8 +172,9 @@ for i = 1 : length(scenarios)
         for iy = min(yr) : max(yr)
             for im = 1 : 12
                 [datetag,datetag2] = get_datetag(iy,im,scenarios{i});
-                folder = ['./data/forcings/' model '/TPQWL'];
-                fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.TPQWL.' datetag2(1:7) '.nc'];
+                folder = ['./data/forcings/' model '/' scenarios{i} '/TPQWL'];
+                fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.TPQWL.' datetag(1:7) '.nc'];
+                %fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.TPQWL.' datetag2(1:7) '.nc'];
                 if ~exist(fname,'file')
                     process_this_file = 1;
                 end
@@ -265,12 +265,12 @@ for i = 1 : length(scenarios)
                 vars{3} = W3h;
                 vars{4} = Q3h;
                 
-                folder = ['./data/forcings/' model '/TPQWL'];
+                folder = ['./data/forcings/' model '/' scenarios{i} '/TPQWL'];
                 if ~exist(folder,'dir')
                     mkdir(folder);
                 end
-                %fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.' tag{j} '.' datetag(1:7) '.nc'];
-                fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.TPQWL.' datetag2(1:7) '.nc'];
+                fname = [folder '/clmforc.' model '.' scenarios{i} '.c2107.0.5x0.5.TPQWL.' datetag(1:7) '.nc'];
+                %fname = [folder '/clmforc.' model '.' scenarios{i} '.' datetag(1:7) '.c2107.0.5x0.5.TPQWL.' datetag2(1:7) '.nc'];
                 disp(['Generating ' fname]);
                 if ~exist(fname,'file')
                     create_DATM(fname,longxy,latixy,datetag2,t3h',varnames,vars);

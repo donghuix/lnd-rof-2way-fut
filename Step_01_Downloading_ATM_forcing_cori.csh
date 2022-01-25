@@ -3,7 +3,7 @@
 #SBATCH --constraint=haswell
 #SBATCH --job-name=step_01              ## job_name
 #SBATCH --account=m3780                 ## project_name
-#SBATCH --time=48:00:00
+#SBATCH --time=10:30:00
 #SBATCH -q regular
 #SBATCH --nodes=1                       ## number_of_nodes
 #SBATCH --tasks-per-node=64             ## number_of_cores
@@ -12,6 +12,8 @@
 
 ulimit -s unlimited
 
-module load matlab
+#module load matlab
 
-matlab  -nodisplay -nosplash <Step_01_Downloading_ATM_forcing.m> Step_01_Downloading_ATM_forcing.log
+#matlab  -nodisplay -nosplash <Step_01_Downloading_ATM_forcing.m> Step_01_Downloading_ATM_forcing.log
+
+sh download_GFDL.sh > download_GFDL.log
