@@ -23,12 +23,16 @@ time_intervals2 = {'2015_2020','2021_2030','2031_2040','2041_2050',     ...
 
 Climate_forcing = {'GFDL-ESM4','IPSL-CM6A-LR','MPI-ESM1-2-HR','MRI-ESM2-0','UKESM1-0-LL'};
 
-for iCf = 1 %: length(Climate_forcing)
+for iCf = 5 : length(Climate_forcing)
     str1 = ['http://esg.pik-potsdam.de/thredds/fileServer/'             ...
             'isimip_dataroot/isimip3b/input/clim_atm_sim/'              ...
             'W5E5-ISIMIP3BASD2-5-0/' Climate_forcing{iCf} '/'];
     str2 = '/daily/v20210512/';
-    prefix = [lower(Climate_forcing{iCf}) '_r1i1p1f1_w5e5_'];
+    if iCf == 5
+        prefix = [lower(Climate_forcing{iCf}) '_r1i1p1f2_w5e5_'];
+    else
+        prefix = [lower(Climate_forcing{iCf}) '_r1i1p1f1_w5e5_'];
+    end
     suffix = '_global_daily_';
     for i = 1 : length(scenarios)
         for j = 1 : length(vars)

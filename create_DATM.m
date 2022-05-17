@@ -20,7 +20,7 @@ function create_DATM(fname,longxy,latixy,date_tag,time,varnames,vars,template)
 ivar = 1;
 varid(1) = netcdf.defVar(ncid,'time','NC_FLOAT',[dimid(4)]); 
 netcdf.putAtt(ncid,ivar-1,'calendar','noleap');
-netcdf.putAtt(ncid,ivar-1,'units',['days since ' date_tag '00:00:00']);
+netcdf.putAtt(ncid,ivar-1,'units',['days since ' date_tag ' 00:00:00']);
 
 ivar = 2;
 varid(2) = netcdf.defVar(ncid,'LONGXY','NC_FLOAT',[dimid(2) dimid(3)]); 
