@@ -2,6 +2,9 @@
 *.log
 *.stderr*
 *.stdout*
+*.err
+*.std
+*.out
 data/
 GFDL-ESM4/
 IPSL-CM6A-LR/

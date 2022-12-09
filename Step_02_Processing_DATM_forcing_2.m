@@ -1,29 +1,38 @@
 clear;close all;clc;
 
-scenarios = {'historical','ssp126','ssp370','ssp585'};
+username = char(java.lang.System.getProperty('user.name'));
+
+scenarios = {'historical','ssp126','ssp585'};
 
 time_intervals1 = {'1951_1960','1961_1970','1971_1980','1981_1990','1991_2000','2001_2010','2011_2014'};
                   %'1911_1920','1921_1930','1931_1940','1941_1950', ...
                   
 time_intervals2 = {'2015_2020','2021_2030','2031_2040','2041_2050','2051_2060','2061_2070','2071_2080','2081_2090','2091_2100'};
 
-model = 'gfdl-esm4'; %'ipsl-cm6a-lr';
+model = 'gfdl-esm4'; %'mri-esm2-0';%'mpi-esm1-2-hr'; %'ipsl-cm6a-lr';
 
-parpool('local',7);
+%parpool('local',7);
 
 days_of_month = [31; 28; 31; 30; 31; 30; 31; 31; 30; 31; 30; 31];
 
 tag = {'Prec','Solr','TPQWL'};
 
-datadir = '/project/projectdirs/m3426/donghui/data/forcings/';
+disp(username);
+if contains(username,'xudo627')
+    datadir = '/compyfs/icom/xudo627/lnd-rof-2way-fut/data/forcings/';
+else
+    datadir = '/project/projectdirs/m3426/donghui/data/forcings/';
+end
 
 domain = 'GLOBAL';%'NLDAS';
 % NLDAS extent
-xmin = -125.75; xmax = -66.25; ymin = 24.25; ymax = 53.75;
-irow1 = 109; irow2 = 228; icol1 = 73; icol2 = 132;
-ele = ncread('/project/projectdirs/m3780/donghui/Runoff_Projection_Uncertainty/inputdata/MOSART_NLDAS_8th_c210129.nc','ele');
-ele = nanmean(ele,3);
-ele = ele(irow1:irow2,icol1:icol2);
+if strcmp(domain,'NLDAS')
+    xmin = -125.75; xmax = -66.25; ymin = 24.25; ymax = 53.75;
+    irow1 = 109; irow2 = 228; icol1 = 73; icol2 = 132;
+    ele = ncread('/project/projectdirs/m3780/donghui/Runoff_Projection_Uncertainty/inputdata/MOSART_NLDAS_8th_c210129.nc','ele');
+    ele = nanmean(ele,3);
+    ele = ele(irow1:irow2,icol1:icol2);
+end
 
 days_of_month = [31;28;31;30;31;30;31;31;30;31;30;31];
 
@@ -71,9 +80,11 @@ for i = 1 : length(scenarios)
             case 'Prec'
                 varnames = {'PRECTmms'};
                 varread  = {'prAdjust'};
+                varread2 = {'pr'};
             case 'Solr'
                 varnames = {'FSDS'};
                 varread  = {'rsdsAdjust'};
+                varread2 = {'rsds'};
         end
         
         for k = 1 : length(time_intervals)
@@ -104,7 +115,12 @@ for i = 1 : length(scenarios)
                 if strcmp(domain,'NLDAS')
                     varall{ivar} = ncread(filename,varread{ivar},[irow1,icol1,1],[irow2-irow1+1,icol2-icol1+1,inf]);
                 else
-                    varall{ivar} = ncread(filename,varread{ivar});
+                    try
+                        tmp = ncread(filename,varread{ivar});
+                    catch
+                        tmp = ncread(filename,varread2{ivar});
+                    end
+                    varall{ivar} = tmp;
                 end
                 lon = ncread(filename,'lon');
                 lat = ncread(filename,'lat');
@@ -114,6 +130,9 @@ for i = 1 : length(scenarios)
                 if strcmp(domain,'NLDAS')
                     longxy = longxy(irow1:irow2,icol1:icol2);
                     latixy = latixy(irow1:irow2,icol1:icol2);
+                elseif strcmp(domain,'GLOBAL')
+                    longxy = fliplr(longxy);
+                    latixy = fliplr(latixy);
                 end
             end
             nyrs = length(unique(yr));
@@ -137,6 +156,7 @@ for i = 1 : length(scenarios)
                             tmp1 = tmp1(:,:,1:28);
                         end
                         tmp = tmp1;
+                        tmp = fliplr(tmp);
                         vars{ivar} = tmp;
                     end
                     folder = [datadir model '/' scenarios{i} '/' tag{j}];
@@ -209,11 +229,19 @@ for i = 1 : length(scenarios)
             disp(['Reading ' filename5]);
             tasminAdjust  = ncread(filename5,'tasminAdjust',[irow1,icol1,1],[irow2-irow1+1,icol2-icol1+1,inf]);
         else
-            psAdjust      = ncread(filename1,'psAdjust');
-            sfcWindAdjust = ncread(filename2,'sfcWindAdjust');
-            hussAdjust    = ncread(filename3,'hussAdjust');
-            tasmaxAdjust  = ncread(filename4,'tasmaxAdjust');
-            tasminAdjust  = ncread(filename5,'tasminAdjust');
+            try
+                psAdjust      = ncread(filename1,'psAdjust');
+                sfcWindAdjust = ncread(filename2,'sfcWindAdjust');
+                hussAdjust    = ncread(filename3,'hussAdjust');
+                tasmaxAdjust  = ncread(filename4,'tasmax');
+                tasminAdjust  = ncread(filename5,'tasmin');
+            catch
+                psAdjust      = ncread(filename1,'ps');
+                sfcWindAdjust = ncread(filename2,'sfcwind');
+                hussAdjust    = ncread(filename3,'huss');
+                tasmaxAdjust  = ncread(filename4,'tasmax');
+                tasminAdjust  = ncread(filename5,'tasmin');
+            end
         end
         
         lon = ncread(filename1,'lon');
@@ -224,6 +252,9 @@ for i = 1 : length(scenarios)
         if strcmp(domain,'NLDAS')
             longxy = longxy(irow1:irow2,icol1:icol2);
             latixy = latixy(irow1:irow2,icol1:icol2);
+        elseif strcmp(domain,'GLOBAL')
+            longxy = fliplr(longxy);
+            latixy = fliplr(latixy);
         end
         
         [m,n,~] = size(psAdjust);
@@ -295,10 +326,10 @@ for i = 1 : length(scenarios)
                 end
                 
                 vars = cell(4,1);
-                vars{1} = P3h;
-                vars{2} = T3h;
-                vars{3} = W3h;
-                vars{4} = Q3h;
+                vars{1} = fliplr(P3h);
+                vars{2} = fliplr(T3h);
+                vars{3} = fliplr(W3h);
+                vars{4} = fliplr(Q3h);
                 
                 folder = [datadir model '/' scenarios{i} '/TPQWL'];
                 if ~exist(folder,'dir')
